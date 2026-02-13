@@ -1,1 +1,611 @@
-<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Seating Arrangement App</title>\n    <style>\n        body {\n            background-color: maroon;\n            color: gold;\n            font-family: Arial, sans-serif;\n        }\n        #table-container {\n            display: flex;\n            flex-wrap: wrap;\n            margin: 20px;\n        }\n        .table {\n            border: 2px solid gold;\n            margin: 5px;\n            height: 100px;\n            width: 100px;\n            cursor: move;\n            text-align: center;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            background-color: #fff;\n        }\n    </style>\n</head>\n<body>\n    <h1>Seating Arrangement Application</h1>\n    <div>\n        <label for="seatCount">Enter number of seats:</label>\n        <input type="number" id="seatCount" min="1" value="4">\n        <button id="generate">Generate Tables</button>\n    </div>\n    <div id="table-container"></div>\n    <script>\n        document.getElementById('generate').onclick = function() {\n            let count = document.getElementById('seatCount').value;\n            let container = document.getElementById('table-container');\n            container.innerHTML = '';\n            for (let i = 0; i < count; i++) {\n                let table = document.createElement('div');\n                table.classList.add('table');\n                table.innerText = 'Seat ' + (i + 1);\n                table.setAttribute('draggable', true);\n                table.ondragstart = function(e) {\n                    e.dataTransfer.setData('text/plain', this.innerText);\n                };\n                container.appendChild(table);\n            }\n        };\n    </script>\n</body>\n</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forest Lake High School - Seating Arrangement</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #800000 0%, #600000 100%);
+            color: #FFD700;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #FFD700;
+            padding-bottom: 15px;
+        }
+
+        header h1 {
+            color: #FFD700;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        header p {
+            color: #DEB887;
+            margin-top: 5px;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #FFD700;
+            height: fit-content;
+        }
+
+        .sidebar h2 {
+            color: #FFD700;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 10px;
+        }
+
+        .table-palette {
+            margin-bottom: 20px;
+        }
+
+        .table-type {
+            background: linear-gradient(135deg, #A00000 0%, #800000 100%);
+            border: 2px solid #FFD700;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: move;
+            border-radius: 5px;
+            text-align: center;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .table-type:hover {
+            background: linear-gradient(135deg, #C00000 0%, #A00000 100%);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            transform: scale(1.05);
+        }
+
+        .table-type label {
+            display: block;
+            color: #FFD700;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .seat-input {
+            width: 100%;
+            padding: 5px;
+            background: rgba(255,215,0,0.1);
+            border: 1px solid #FFD700;
+            color: #FFD700;
+            border-radius: 3px;
+            text-align: center;
+        }
+
+        .seat-input::placeholder {
+            color: rgba(255,215,0,0.6);
+        }
+
+        .random-section {
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 5px;
+            border: 2px solid #FFD700;
+        }
+
+        .random-section h3 {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+
+        .name-input-group {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .name-input {
+            flex: 1;
+            padding: 8px;
+            background: rgba(255,215,0,0.1);
+            border: 1px solid #FFD700;
+            color: #FFD700;
+            border-radius: 3px;
+        }
+
+        .name-input::placeholder {
+            color: rgba(255,215,0,0.6);
+        }
+
+        button {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #800000;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,215,0,0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .names-list {
+            margin-top: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 3px;
+        }
+
+        .name-tag {
+            background: #FFD700;
+            color: #800000;
+            padding: 5px;
+            margin: 3px 0;
+            border-radius: 3px;
+            font-size: 0.85em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .name-tag button {
+            background: #800000;
+            color: #FFD700;
+            padding: 2px 6px;
+            font-size: 0.8em;
+            width: auto;
+            margin: 0;
+        }
+
+        .canvas-area {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,215,0,0.05) 100%);
+            border: 3px dashed #FFD700;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 600px;
+            position: relative;
+            overflow: auto;
+        }
+
+        .canvas-area.drag-over {
+            background: linear-gradient(135deg, rgba(255,215,0,0.2) 0%, rgba(255,215,0,0.1) 100%);
+            box-shadow: inset 0 0 20px rgba(255,215,0,0.3);
+        }
+
+        .table {
+            position: absolute;
+            background: linear-gradient(135deg, #A00000 0%, #800000 100%);
+            border: 3px solid #FFD700;
+            border-radius: 8px;
+            padding: 10px;
+            cursor: move;
+            user-select: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .table:hover {
+            box-shadow: 0 8px 20px rgba(255,215,0,0.3);
+            z-index: 100;
+        }
+
+        .table.dragging {
+            opacity: 0.8;
+            z-index: 1000;
+        }
+
+        .table-header {
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .seats-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            justify-content: center;
+            min-width: 80px;
+        }
+
+        .seat {
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle at 30% 30%, #FFD700, #FFA500);
+            border: 2px solid #DEB887;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            color: #800000;
+            font-weight: bold;
+        }
+
+        .seat.assigned {
+            background: radial-gradient(circle at 30% 30%, #FFD700, #FFA500);
+            border-color: #00FF00;
+        }
+
+        .delete-btn {
+            background: #C00000;
+            color: #FFD700;
+            border: 1px solid #FFD700;
+            padding: 3px 8px;
+            margin-top: 5px;
+            font-size: 0.75em;
+            width: 90%;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .delete-btn:hover {
+            background: #FF0000;
+            box-shadow: 0 0 10px rgba(255,0,0,0.5);
+        }
+
+        .tooltip {
+            position: absolute;
+            background: #FFD700;
+            color: #800000;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            pointer-events: none;
+            white-space: nowrap;
+            z-index: 2000;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            flex: 1;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #666 0%, #444 100%);
+            flex: 1;
+            color: #FFD700;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        .instructions {
+            background: rgba(255,215,0,0.1);
+            border: 1px solid #FFD700;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+            color: #DEB887;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🦁 Forest Lake High School</h1>
+        <p>Seating Arrangement Generator</p>
+    </header>
+
+    <div class="container">
+        <div class="sidebar">
+            <div class="instructions">
+                📋 Drag table types to canvas and adjust seat counts. Add names for random assignment.
+            </div>
+
+            <div class="table-palette">
+                <h2>Table Types</h2>
+
+                <div class="table-type" draggable="true" data-type="rectangle">
+                    <label>📦 Rectangular Table</label>
+                    <input type="number" class="seat-input" placeholder="Seats (4-8)" min="4" max="8" value="6">
+                </div>
+
+                <div class="table-type" draggable="true" data-type="square">
+                    <label>⬜ Square Table</label>
+                    <input type="number" class="seat-input" placeholder="Seats (4)" min="4" max="8" value="4">
+                </div>
+
+                <div class="table-type" draggable="true" data-type="desk">
+                    <label>🖊️ Desk with Chair</label>
+                    <input type="number" class="seat-input" placeholder="Seats (1)" value="1">
+                </div>
+
+                <div class="table-type" draggable="true" data-type="chair">
+                    <label>🪑 Chair Only</label>
+                    <input type="number" class="seat-input" placeholder="Seats (1)" value="1">
+                </div>
+            </div>
+
+            <div class="random-section">
+                <h3>👥 Random Seating</h3>
+                <div class="name-input-group">
+                    <input type="text" class="name-input" id="nameInput" placeholder="Enter name">
+                    <button onclick="addName()" style="width: auto; margin: 0;">Add</button>
+                </div>
+
+                <div class="names-list" id="namesList"></div>
+
+                <div class="controls">
+                    <button class="btn-primary" onclick="assignSeating()">🎲 Assign Seating</button>
+                    <button class="btn-secondary" onclick="clearNames()">🗑️ Clear Names</button>
+                </div>
+            </div>
+
+            <div class="controls" style="margin-top: 20px;">
+                <button class="btn-secondary" onclick="clearCanvas()">Clear Canvas</button>
+            </div>
+        </div>
+
+        <div class="canvas-area" id="canvas"></div>
+    </div>
+
+    <script>
+        let names = [];
+        let tables = [];
+        let tableCounter = 0;
+
+        // Drag and drop for table types
+        document.querySelectorAll('.table-type').forEach(type => {
+            type.addEventListener('dragstart', (e) => {
+                const seatInput = type.querySelector('.seat-input');
+                const seats = parseInt(seatInput.value) || (type.dataset.type === 'rectangle' ? 6 : type.dataset.type === 'square' ? 4 : 1);
+                e.dataTransfer.effectAllowed = 'copy';
+                e.dataTransfer.setData('tableType', JSON.stringify({
+                    type: type.dataset.type,
+                    seats: seats
+                }));
+            });
+        });
+
+        // Canvas drag over and drop
+        const canvas = document.getElementById('canvas');
+
+        canvas.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            canvas.classList.add('drag-over');
+        });
+
+        canvas.addEventListener('dragleave', () => {
+            canvas.classList.remove('drag-over');
+        });
+
+        canvas.addEventListener('drop', (e) => {
+            e.preventDefault();
+            canvas.classList.remove('drag-over');
+
+            const data = e.dataTransfer.getData('tableType');
+            if (data) {
+                const tableData = JSON.parse(data);
+                createTable(e.clientX - canvas.getBoundingClientRect().left, 
+                           e.clientY - canvas.getBoundingClientRect().top, 
+                           tableData);
+            }
+        });
+
+        function createTable(x, y, tableData) {
+            const tableId = `table-${tableCounter++}`;
+            const table = document.createElement('div');
+            table.className = 'table';
+            table.id = tableId;
+            table.style.left = x + 'px';
+            table.style.top = y + 'px';
+            table.draggable = true;
+
+            const typeLabel = {
+                rectangle: '📦 Rectangle',
+                square: '⬜ Square',
+                desk: '🖊️ Desk',
+                chair: '🪑 Chair'
+            };
+
+            table.innerHTML = `
+                <div class="table-header">${typeLabel[tableData.type]}</div>
+                <div class="seats-container" data-seats="${tableData.seats}">
+                    ${generateSeats(tableData.seats)}
+                </div>
+                <button class="delete-btn" onclick="deleteTable('${tableId}')">Delete</button>
+            `;
+
+            canvas.appendChild(table);
+            tables.push({ id: tableId, element: table, type: tableData.type, seats: tableData.seats });
+
+            // Make table draggable
+            makeTableDraggable(table, tableId);
+        }
+
+        function generateSeats(count) {
+            let seats = '';
+            for (let i = 0; i < count; i++) {
+                seats += `<div class="seat" data-index="${i}"></div>`;
+            }
+            return seats;
+        }
+
+        function makeTableDraggable(table, tableId) {
+            let offsetX = 0;
+            let offsetY = 0;
+            let isMouseDown = false;
+
+            table.addEventListener('mousedown', (e) => {
+                isMouseDown = true;
+                offsetX = e.clientX - table.getBoundingClientRect().left;
+                offsetY = e.clientY - table.getBoundingClientRect().top;
+                table.classList.add('dragging');
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isMouseDown) {
+                    const rect = canvas.getBoundingClientRect();
+                    let x = e.clientX - rect.left - offsetX;
+                    let y = e.clientY - rect.top - offsetY;
+
+                    // Keep table within canvas
+                    x = Math.max(0, Math.min(x, canvas.offsetWidth - table.offsetWidth));
+                    y = Math.max(0, Math.min(y, canvas.offsetHeight - table.offsetHeight));
+
+                    table.style.left = x + 'px';
+                    table.style.top = y + 'px';
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                isMouseDown = false;
+                table.classList.remove('dragging');
+            });
+        }
+
+        function deleteTable(tableId) {
+            const table = document.getElementById(tableId);
+            if (table) {
+                table.remove();
+                tables = tables.filter(t => t.id !== tableId);
+            }
+        }
+
+        function clearCanvas() {
+            canvas.innerHTML = '';
+            tables = [];
+            tableCounter = 0;
+        }
+
+        function addName() {
+            const input = document.getElementById('nameInput');
+            const name = input.value.trim();
+
+            if (name === '') {
+                alert('Please enter a name');
+                return;
+            }
+
+            if (names.includes(name)) {
+                alert('Name already added');
+                return;
+            }
+
+            names.push(name);
+            input.value = '';
+            renderNames();
+        }
+
+        function removeName(name) {
+            names = names.filter(n => n !== name);
+            renderNames();
+        }
+
+        function renderNames() {
+            const list = document.getElementById('namesList');
+            list.innerHTML = names.map(name => `
+                <div class="name-tag">
+                    <span>${name}</span>
+                    <button onclick="removeName('${name}')">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function clearNames() {
+            names = [];
+            renderNames();
+        }
+
+        function assignSeating() {
+            if (names.length === 0) {
+                alert('Please add at least one name');
+                return;
+            }
+
+            const totalSeats = tables.reduce((sum, t) => sum + t.seats, 0);
+
+            if (names.length > totalSeats) {
+                alert(`Too many names (${names.length}) for available seats (${totalSeats})`);
+                return;
+            }
+
+            // Shuffle names
+            const shuffledNames = [...names].sort(() => Math.random() - 0.5);
+
+            // Clear all seats
+            document.querySelectorAll('.seat').forEach(seat => {
+                seat.textContent = '';
+                seat.classList.remove('assigned');
+            });
+
+            // Assign shuffled names to seats
+            let nameIndex = 0;
+            document.querySelectorAll('.seat').forEach(seat => {
+                if (nameIndex < shuffledNames.length) {
+                    seat.textContent = shuffledNames[nameIndex].charAt(0).toUpperCase();
+                    seat.title = shuffledNames[nameIndex];
+                    seat.classList.add('assigned');
+                    nameIndex++;
+                }
+            });
+
+            alert(`✓ Seating assigned! ${names.length} people seated.`);
+        }
+
+        // Allow Enter key to add name
+        document.getElementById('nameInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addName();
+            }
+        });
+    </script>
+</body>
+</html>
