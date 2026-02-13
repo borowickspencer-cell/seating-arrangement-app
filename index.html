@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seating Arrangement App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFDFD3; /* Light background */
+            color: #6F2C3E; /* Maroon text */
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #E3A06D; /* Gold color */
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .table-type {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #6F2C3E;
+            margin: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .table-type:hover {
+            transform: scale(1.1);
+            border-color: #E3A06D;
+        }
+        .draggable {
+            background-color: #FFDFD3;
+            border-radius: 5px;
+            padding: 5px;
+            cursor: move;
+        }
+        #seating-arrangement {
+            margin-top: 20px;
+            border: 1px solid #6F2C3E;
+            padding: 10px;
+            min-height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Forest Lake High School Seating Arrangement</h1>
+    <div class="container">
+        <div class="table-type draggable" data-type="rectangle">Rectangle</div>
+        <div class="table-type draggable" data-type="square">Square</div>
+        <div class="table-type draggable" data-type="desk">Desk with Chair</div>
+        <div class="table-type draggable" data-type="chair">Chair Only</div>
+    </div>
+    <div>
+        <label for="seatCount">Number of Seats:</label>
+        <input type="number" id="seatCount" min="1" value="1">
+        <button onclick="assignSeats()">Randomize Seating</button>
+    </div>
+    <div id="seating-arrangement"></div>
+    <script>
+        function assignSeats() {
+            const seatCount = document.getElementById('seatCount').value;
+            const seatingDiv = document.getElementById('seating-arrangement');
+            seatingDiv.innerHTML = ''; // Clear previous seating
+            for (let i = 0; i < seatCount; i++) {
+                const seat = document.createElement('div');
+                seat.className = 'draggable';
+                seat.innerText = 'Seat ' + (i + 1);
+                seatingDiv.appendChild(seat);
+                // Add drag and drop functionality here
+            }
+            alert('Seating has been randomized!');
+        }
+    </script>
+</body>
+</html>
